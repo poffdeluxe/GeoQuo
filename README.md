@@ -3,7 +3,7 @@ GeoQuo
 
 A simple, poorly-named API for retrieving timezone specific information
 
-You can use my personal instance available here: [http://geoquo.poff.sexy/]
+You can use my personal instance available here: http://geoquo.poff.sexy/
 
 ## Sample Usage
 
