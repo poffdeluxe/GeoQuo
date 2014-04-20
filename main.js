@@ -7,6 +7,9 @@ var citiesByName = {};
 for(var cityKey in cities) {
 	var city = cities[cityKey];
 
+	//Parse a string to an int
+	city.population = parseInt(city.population);
+
 	if(citiesByName[city.name]) {
 		citiesByName[city.name].push(city);
 	} else {
@@ -28,15 +31,16 @@ function getCity(cityName, countryCode) {
 	if(cityArray.length > 1) {
 		//We have more than one city by that name...
 		if(!countryCode) {
+
 			//No country code specified -- choose city with largest population
 			returnCity = cityArray[0];
 
 			cityArray.forEach(function(city) {
-				console.log(city);
 				if(city.population > returnCity.population) {
 					returnCity = city;
 				}
 			});
+
 		} else {
 			//Try to find a city that matches the country code
 			cityArray.forEach(function(city) {
