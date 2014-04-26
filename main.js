@@ -19,7 +19,7 @@ for(var cityKey in cities) {
 
 var app = express();
 
-function getCity(cityName, countryCode) {
+function getCity(cityName, countryCode, state) {
 	var cityArray = citiesByName[cityName];
 
 	if(!cityArray) {
@@ -44,25 +44,47 @@ function getCity(cityName, countryCode) {
 		} else {
 			//Try to find a city that matches the country code
 			cityArray.forEach(function(city) {
-				//If the city is in the US, use the countryCode passed in to mean state
-				if(city.countrycode == countryCode || (city.countrycode == 'US' && city.state == countryCode)) {
-					returnCity = city;
+
+				if(city.countrycode == countryCode) {
+					//Country code is the US and we have a state available
+					if(countryCode == 'US' && state) {
+						//Must match the state
+						if(city.state == state) {
+							returnCity = city;
+						}
+					} else {
+						returnCity = city;
+					}
 				}
+
 			});
 		}
 	} else {
 		//Only one city by that name
+		var city = cityArray[0];
+
+		//If country code is specified but it doesn't match
+		if(countryCode && city.countrycode != countryCode) {
+			return;
+		}
+
+		//If country code is US and state does not match
+		if(countryCode == 'US' && state && city.state != state) {
+			return;
+		}
+
 		returnCity = cityArray[0];
 	}
 
 	return returnCity;
 }
 
-app.get('/time/:name/:cc?', function(req, res) {
+app.get('/time/:name/:cc?/:st?', function(req, res) {
 	var cityName = req.params.name;
 	var countryCode = req.params.cc;
+	var state = req.params.st;
 
-	var city = getCity(cityName, countryCode);
+	var city = getCity(cityName, countryCode, state);
 
 	if(!city) {
 		//Send error response
@@ -73,8 +95,8 @@ app.get('/time/:name/:cc?', function(req, res) {
 
 	//Calculate local time (for that timezone) here
 	var curTime = moment().tz(city.timezone).format();
-
-    res.send({name:cityName, countrycode: city.countrycode, timezone: city.timezone, localtime: curTime});
+	
+	res.send({name:cityName, countrycode: city.countrycode, timezone: city.timezone, localtime: curTime});
 });
 
 app.listen(process.env.PORT || 3000);
