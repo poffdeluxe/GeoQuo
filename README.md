@@ -23,6 +23,6 @@ You can use my personal instance available here: http://geoquo.poff.sexy/
 
 #### Pull time information for a specified city in the US
 ```
-/time/Buffalo/MN
+/time/Buffalo/US/MN
 ```
-[Example URL](http://geoquo.poff.sexy/time/Buffalo/MN)
+[Example URL](http://geoquo.poff.sexy/time/Buffalo/US/MN)
